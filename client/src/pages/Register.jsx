@@ -1,4 +1,4 @@
-import { Form, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Logo } from '../components';
 import Wrapper from '../assets/wrappers/RegisterAndLoginPage';
 import { FormRow } from '../components/index';
@@ -34,10 +34,12 @@ const Register = () => {
                 <button type="submit" className="btn btn-block">
                     submit
                 </button>
-                <p>Already a member?</p>
-                <Link to="/login" className="member-btn">
-                    Login
-                </Link>
+                <p>
+                    Already a member?
+                    <Link to="/login" className="member-btn">
+                        Login
+                    </Link>
+                </p>
             </form>
         </Wrapper>
     );
