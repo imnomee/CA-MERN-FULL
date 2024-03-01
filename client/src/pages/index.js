@@ -1,3 +1,5 @@
+//importing and exporting from Index.js helps us shorten the process of importing in App.jsx
+
 export { default as DashboardLayout } from './DashboardLayout';
 export { default as Landing } from './Landing';
 export { default as AddJob } from './AddJob';
