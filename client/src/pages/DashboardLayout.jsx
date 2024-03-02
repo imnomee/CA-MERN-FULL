@@ -5,6 +5,7 @@ import { createContext, useContext, useState } from 'react';
 import { checkDefaultTheme } from '../App';
 
 const DashboardContext = createContext();
+
 // const checkDefaultTheme = () => {
 //     const isDarkTheme = localStorage.getItem('dark-theme') === 'true';
 //     document.body.classList.toggle('dark-theme', isDarkTheme);
@@ -12,7 +13,7 @@ const DashboardContext = createContext();
 // };
 const DashboardLayout = () => {
     //temp
-    const user = { name: 'nomee' };
+    const user = { name: 'nomee' }; //this will come from our server
     const [showSideBar, setShowSideBar] = useState(false);
     const [isDarkTheme, setIsDarkTheme] = useState(checkDefaultTheme());
 

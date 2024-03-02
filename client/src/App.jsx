@@ -6,8 +6,8 @@ import {
     Landing,
     Register,
     Login,
-    DashboardLayout,
     Error,
+    DashboardLayout, //dashboard childrens
     AddJob,
     AllJobs,
     Stats,
