@@ -46,6 +46,25 @@ app.get('/api/v1/jobs/:id', (req, res) => {
     return res.status(200).json({ job });
 });
 
+//patch a job
+app.patch('/api/v1/jobs/:id', (req, res) => {
+    const { company, position } = req.body; //get compnay and position from body
+    if (!company || !position) {
+        return res
+            .status(400)
+            .json({ msg: 'please provide company and position' });
+    }
+
+    const { id } = req.params; //get id from params
+    const job = jobs.find((j) => j.id === id);
+    if (!job) {
+        return res.status(404).json({ msg: `no job with id ${id}` });
+    }
+    job.company = company;
+    job.position = position;
+    return res.status(200).json({ job });
+});
+
 //post a new job
 app.post('/api/v1/jobs', (req, res) => {
     const { company, position } = req.body;
