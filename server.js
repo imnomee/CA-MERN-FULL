@@ -15,12 +15,12 @@ if (process.env.NODE_ENV === 'development') {
 
 const jobs = [
     {
-        id: nanoid(),
+        id: nanoid(10),
         company: 'apple',
         position: 'front-end',
     },
     {
-        id: nanoid(),
+        id: nanoid(10),
         company: 'google',
         position: 'back-end',
     },
@@ -30,13 +30,23 @@ const jobs = [
 app.get('/', (req, res) => {
     res.send('hello world');
 });
-app.post('/', (req, res) => {
-    // console.log(req);
-    res.json({ message: 'data received', data: req.body });
-});
+
+//get all jobs
 app.get('/api/v1/jobs', (req, res) => {
     res.status(200).json({ jobs });
 });
+
+//get single job
+app.get('/api/v1/jobs/:id', (req, res) => {
+    const { id } = req.params;
+    const job = jobs.find((job) => job.id === id);
+    if (!job) {
+        return res.status(404).json({ msg: `no job with id ${id}` });
+    }
+    return res.status(200).json({ job });
+});
+
+//post a new job
 app.post('/api/v1/jobs', (req, res) => {
     const { company, position } = req.body;
     if (!company || !position) {
