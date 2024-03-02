@@ -3,7 +3,7 @@ dotenv.config();
 
 import express from 'express';
 import morgan from 'morgan';
-import { nanoid } from 'nanoid';
+import jobRouter from './routes/job.router.js';
 
 const app = express();
 app.use(express.json()); //make app accepts json data
@@ -13,72 +13,20 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev')); //make app use morgan logger
 }
 
-const jobs = [
-    {
-        id: nanoid(10),
-        company: 'apple',
-        position: 'front-end',
-    },
-    {
-        id: nanoid(10),
-        company: 'google',
-        position: 'back-end',
-    },
-];
-
 //routes
-app.get('/', (req, res) => {
-    res.send('hello world');
+app.use('/api/v1/jobs', jobRouter);
+
+// NOT FOUND REQUEST,
+app.use('*', (req, res) => {
+    return res.status(404).json({ msg: 'Not Found' });
 });
 
-//get all jobs
-app.get('/api/v1/jobs', (req, res) => {
-    res.status(200).json({ jobs });
-});
-
-//get single job
-app.get('/api/v1/jobs/:id', (req, res) => {
-    const { id } = req.params;
-    const job = jobs.find((job) => job.id === id);
-    if (!job) {
-        return res.status(404).json({ msg: `no job with id ${id}` });
-    }
-    return res.status(200).json({ job });
-});
-
-//patch a job
-app.patch('/api/v1/jobs/:id', (req, res) => {
-    const { company, position } = req.body; //get compnay and position from body
-    if (!company || !position) {
-        return res
-            .status(400)
-            .json({ msg: 'please provide company and position' });
-    }
-
-    const { id } = req.params; //get id from params
-    const job = jobs.find((j) => j.id === id);
-    if (!job) {
-        return res.status(404).json({ msg: `no job with id ${id}` });
-    }
-    job.company = company;
-    job.position = position;
-    return res.status(200).json({ job });
-});
-
-//post a new job
-app.post('/api/v1/jobs', (req, res) => {
-    const { company, position } = req.body;
-    if (!company || !position) {
-        return res
-            .status(400)
-            .json({ msg: 'Please provide company and position' });
-    }
-
-    const id = nanoid(10);
-    const job = { id, company, position };
-    jobs.push(job);
-
-    return res.status(200).json({ job });
+//error middleware, this middleware has to be the last one in order to handle errors
+//this middleware gets triggered when we send error from try Catch methods
+//Also when we use throw New Error from within a route
+app.use((err, req, res, next) => {
+    console.log(err);
+    return res.status(500).json({ msg: 'something went wrong' });
 });
 
 const port = process.env.PORT || 5125;
