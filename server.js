@@ -5,6 +5,10 @@ import express from 'express';
 import morgan from 'morgan';
 import jobRouter from './routes/job.router.js';
 
+//mongoose
+import mongoose from 'mongoose';
+mongoose.set('strictQuery', true);
+
 const app = express();
 app.use(express.json()); //make app accepts json data
 
@@ -30,5 +34,13 @@ app.use((err, req, res, next) => {
 });
 
 const port = process.env.PORT || 5125;
-
-app.listen(port, () => console.log('Sever is running on:', port));
+try {
+    await mongoose.connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+    app.listen(port, () => console.log('Sever is running on:', port));
+} catch (error) {
+    console.log(error);
+    process.exit(1);
+}

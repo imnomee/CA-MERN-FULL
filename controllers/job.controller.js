@@ -1,19 +1,33 @@
 //this controller takes control of the functions we run on the routes
 
-import { nanoid } from 'nanoid';
+// import { nanoid } from 'nanoid';
 
-let jobs = [
-    {
-        id: nanoid(10),
-        company: 'apple',
-        position: 'front-end',
-    },
-    {
-        id: nanoid(10),
-        company: 'google',
-        position: 'back-end',
-    },
-];
+// let jobs = [
+//     {
+//         id: nanoid(10),
+//         company: 'apple',
+//         position: 'front-end',
+//     },
+//     {
+//         id: nanoid(10),
+//         company: 'google',
+//         position: 'back-end',
+//     },
+// ];
+
+import Job from '../models/Job.Model.js';
+
+//create a new job
+export const createAJob = async (req, res) => {
+    const { company, position } = req.body;
+    const job = await Job.create({ company, position });
+    return res.status(200).json({ job });
+};
+
+//get all jobs
+export const getAllJobs = async (req, res) => {
+    return res.status(200).json({ jobs });
+};
 
 //get single job
 export const getAJob = async (req, res) => {
@@ -23,11 +37,6 @@ export const getAJob = async (req, res) => {
         return res.status(404).json({ msg: `no job with id ${id}` });
     }
     return res.status(200).json({ job });
-};
-
-//get all jobs
-export const getAllJobs = async (req, res) => {
-    return res.status(200).json({ jobs });
 };
 
 //patch a job
@@ -59,20 +68,4 @@ export const deleteAJob = async (req, res) => {
     const newJobs = jobs.filter((j) => j.id !== id);
     jobs = newJobs;
     return res.status(200).json({ msg: 'job deleted', length: jobs.length });
-};
-
-//create a new job
-export const createAJob = async (req, res) => {
-    const { company, position } = req.body;
-    if (!company || !position) {
-        return res
-            .status(400)
-            .json({ msg: 'Please provide company and position' });
-    }
-
-    const id = nanoid(10);
-    const job = { id, company, position };
-    jobs.push(job);
-
-    return res.status(200).json({ job });
 };
