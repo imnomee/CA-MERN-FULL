@@ -26,13 +26,14 @@ export const createAJob = async (req, res) => {
 
 //get all jobs
 export const getAllJobs = async (req, res) => {
+    const jobs = await Job.find({});
     return res.status(200).json({ jobs });
 };
 
 //get single job
 export const getAJob = async (req, res) => {
     const { id } = req.params;
-    const job = jobs.find((job) => job.id === id);
+    const job = await Job.findById(id);
     if (!job) {
         return res.status(404).json({ msg: `no job with id ${id}` });
     }
@@ -41,31 +42,21 @@ export const getAJob = async (req, res) => {
 
 //patch a job
 export const patchAJob = async (req, res) => {
-    const { company, position } = req.body; //get compnay and position from body
-    if (!company || !position) {
-        return res
-            .status(400)
-            .json({ msg: 'please provide company and position' });
+    const { id } = req.params;
+    const updatedJob = await Job.findByIdAndUpdate(id, req.body, { new: true });
+    if (!updatedJob) {
+        return res.status(404).json({ msg: `no job with id: ${id}.` });
     }
 
-    const { id } = req.params; //get id from params
-    const job = jobs.find((j) => j.id === id);
-    if (!job) {
-        return res.status(404).json({ msg: `no job with id ${id}` });
-    }
-    job.company = company;
-    job.position = position;
-    return res.status(200).json({ msg: 'job modified', job });
+    return res.status(201).json({ msg: 'job updated', updatedJob });
 };
 
 //delete a job
 export const deleteAJob = async (req, res) => {
-    const { id } = req.params; //get id from params
-    const job = jobs.find((j) => j.id === id);
-    if (!job) {
-        return res.status(404).json({ msg: `no job with id ${id}` });
+    const { id } = req.params;
+    const removedJob = await Job.findByIdAndDelete(id);
+    if (!removedJob) {
+        return res.status(404).json({ msg: `no job with id: ${id}.` });
     }
-    const newJobs = jobs.filter((j) => j.id !== id);
-    jobs = newJobs;
-    return res.status(200).json({ msg: 'job deleted', length: jobs.length });
+    return res.status(200).json({ msg: 'job deleted', removedJob });
 };

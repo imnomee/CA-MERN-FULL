@@ -1,3 +1,4 @@
+import 'express-async-errors'; //this needs to stay on the top
 import * as dotenv from 'dotenv';
 dotenv.config();
 
