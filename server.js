@@ -6,7 +6,7 @@ import express from 'express';
 import morgan from 'morgan';
 import jobRouter from './routes/job.router.js';
 import errorHandlerMiddleware from './middlewares/errorHandler.middleware.js';
-
+import { validateTest } from './middlewares/validation.middleware.js';
 //mongoose
 import mongoose from 'mongoose';
 mongoose.set('strictQuery', true);
@@ -21,6 +21,12 @@ if (process.env.NODE_ENV === 'development') {
 
 //routes
 app.use('/api/v1/jobs', jobRouter);
+
+//using express validator
+app.post('/api/v1/test', validateTest, (req, res) => {
+    const { name } = req.body;
+    res.json({ msg: `hello ${name}` });
+});
 
 // NOT FOUND REQUEST,
 app.use('*', (req, res) => {
