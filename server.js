@@ -5,6 +5,7 @@ dotenv.config();
 import express from 'express';
 import morgan from 'morgan';
 import jobRouter from './routes/job.router.js';
+import errorHandlerMiddleware from './middlewares/errorHandler.middleware.js';
 
 //mongoose
 import mongoose from 'mongoose';
@@ -29,10 +30,7 @@ app.use('*', (req, res) => {
 //error middleware, this middleware has to be the last one in order to handle errors
 //this middleware gets triggered when we send error from try Catch methods
 //Also when we use throw New Error from within a route
-app.use((err, req, res, next) => {
-    console.log(err);
-    return res.status(500).json({ msg: 'something went wrong' });
-});
+app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 5125;
 try {
