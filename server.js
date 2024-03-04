@@ -4,8 +4,9 @@ dotenv.config();
 
 import express from 'express';
 import morgan from 'morgan';
-import jobRouter from './routes/job.router.js';
 import errorHandlerMiddleware from './middlewares/errorHandler.middleware.js';
+import jobRouter from './routes/job.router.js';
+import authRouter from './routes/auth.router.js';
 
 //mongoose
 import mongoose from 'mongoose';
@@ -21,6 +22,7 @@ if (process.env.NODE_ENV === 'development') {
 
 //routes
 app.use('/api/v1/jobs', jobRouter);
+app.use('/api/v1/auth', authRouter);
 
 // NOT FOUND REQUEST,
 app.use('*', (req, res) => {
