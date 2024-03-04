@@ -76,6 +76,16 @@ export const validateNewUser = withValidationErrors([
     body('location').notEmpty().withMessage('location is required'),
 ]);
 
+//validate user login
+export const validateUserLogin = withValidationErrors([
+    body('email')
+        .notEmpty()
+        .withMessage('email is required')
+        .isEmail()
+        .withMessage('invalid email'),
+    body('password').notEmpty().withMessage('password is required'),
+]);
+
 //test validator
 export const validateTest = withValidationErrors([
     body('name')
