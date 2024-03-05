@@ -5,8 +5,10 @@ dotenv.config();
 import express from 'express';
 import morgan from 'morgan';
 import errorHandlerMiddleware from './middlewares/errorHandler.middleware.js';
-import jobRouter from './routes/job.router.js';
 import authRouter from './routes/auth.router.js';
+import { authenticateUser } from './middlewares/auth.middleware.js';
+import jobRouter from './routes/job.router.js';
+import cookieParser from 'cookie-parser';
 
 //mongoose
 import mongoose from 'mongoose';
@@ -14,14 +16,14 @@ mongoose.set('strictQuery', true);
 
 const app = express();
 app.use(express.json()); //make app accepts json data
-
+app.use(cookieParser());
 //setup morgan in deveopment env
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev')); //make app use morgan logger
 }
 
 //routes
-app.use('/api/v1/jobs', jobRouter);
+app.use('/api/v1/jobs', authenticateUser, jobRouter);
 app.use('/api/v1/auth', authRouter);
 
 // NOT FOUND REQUEST,
