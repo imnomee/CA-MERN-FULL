@@ -23,6 +23,10 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev')); //make app use morgan logger
 }
 
+//proxy testing
+app.get('/api/v1/test', (req, res) => {
+    return res.json({ msg: 'test route' });
+});
 //routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', authenticateUser, userRouter);
