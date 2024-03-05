@@ -3,15 +3,17 @@ import { StatusCodes } from 'http-status-codes';
 
 //create a new job
 export const createAJob = async (req, res) => {
+    req.body.createdBy = req.user.userId;
+    //all the info is provided by the user
+    //but we need to add created by here from the token
     const { company, position } = req.body;
-    const job = await Job.create({ company, position });
+    const job = await Job.create(req.body);
     return res.status(StatusCodes.CREATED).json({ job });
 };
 
 //get all jobs
 export const getAllJobs = async (req, res) => {
-    console.log(req.user);
-    const jobs = await Job.find({});
+    const jobs = await Job.find({ createdBy: req.user.userId });
     return res.status(StatusCodes.OK).json({ length: jobs.length, jobs });
 };
 
