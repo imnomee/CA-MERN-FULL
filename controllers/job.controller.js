@@ -6,7 +6,6 @@ export const createAJob = async (req, res) => {
     req.body.createdBy = req.user.userId;
     //all the info is provided by the user
     //but we need to add created by here from the token
-    const { company, position } = req.body;
     const job = await Job.create(req.body);
     return res.status(StatusCodes.CREATED).json({ job });
 };
