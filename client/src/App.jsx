@@ -15,6 +15,8 @@ import {
     Admin,
 } from './pages/index';
 
+import { action as registerAction } from './pages/Register';
+
 //This function is to check the default theme at the start of app render
 //if the dark storage has the item dark-theme set to true, we have the dark theme set in the last session
 //we set the dark-theme at the start of this session
@@ -42,6 +44,10 @@ const router = createBrowserRouter([
             {
                 path: 'register', //register route
                 element: <Register />,
+                //everytime we will submit the register form,
+                //we will invoke this function
+                //it always needs to return something
+                action: registerAction,
             },
             {
                 path: 'login', //login route
