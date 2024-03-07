@@ -16,6 +16,8 @@ import {
 } from './pages/index';
 
 import { action as registerAction } from './pages/Register';
+import { action as loginAction } from './pages/Login';
+import { loader as loaderDashboard } from './pages/DashboardLayout';
 
 //This function is to check the default theme at the start of app render
 //if the dark storage has the item dark-theme set to true, we have the dark theme set in the last session
@@ -52,10 +54,12 @@ const router = createBrowserRouter([
             {
                 path: 'login', //login route
                 element: <Login />,
+                action: loginAction,
             },
             {
                 path: 'dashboard', //dashboard route has got multiple children in it
                 element: <DashboardLayout />,
+                loader: loaderDashboard,
                 children: [
                     {
                         index: true, //this is the route we land to when we navigate to dashboard route
